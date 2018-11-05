@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+{% load static from staticfiles %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <p style="padding:10px"></p>
+    <h1 style="text-align:center;">{% block result_title %}{% endblock %}</h1>
+
+    <!-- Contains style and format for a book from a query result -->
+        <p style="padding: 10px"></p>
+
+        {% for book in books %}
+        <div class="row">
+            <div class="col-xs-12 col-md-3 col-md-offset-3">
+                <a href="{% url 'products:bookDetail' book.title %}">
+                    <img src="{% static  book.cover_file_name  %}" class="img-responsive img-rounded" height="200" width="200">
+                </a>
+            </div>
+
+            <div class="col-xs-12 col-md-5 col-md-push-1">
+                <a href="{% url 'products:bookDetail' book.title %}" style="color:gray;"><h4>{{ book.title }} </h4></a>
+                <p style="color:gray"> by {{ book.author.first_name }} {{ book.author.last_name }} </p>
+                <p style="padding:5px"> </p>
+                <span class="badge">${{ book.price }}</span>
+                                                <p style="padding:5px"> </p>
+                <img src="/static/img/12.png"height="24" width="24"/>
+                                <span class="label label-info">Rating:  {{ book.rating }}</span>
+            </div>
+
+        </div>
+        <hr>
+        {% endfor %}
+    </div>
+
+    <div>
+        <p style="padding:25px"></p>
+    </div>
+
+</div>
+
+</div>
+
+{% endblock %}

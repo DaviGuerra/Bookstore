@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+{% load static from staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width , initial-scale=1">
+    <title>{% block title %} {% endblock %}</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link href="{% static 'css/mystyles.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/bootstrap-social.css' %}" rel="stylesheet" type="text/css">
+    <style>
+        .fieldSizeFont{
+            font-size:17px;
+            font-family:arial;
+        }
+    </style>
+</head>
+<body style="background-color: silver">
+<style>
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.button5 {
+    background-color: white;
+    color: black;
+    border: 2px solid #555555;
+}
+</style>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+
+            <div class="navbar-header">
+                    <div class="navbar-collapse collapse" id="navbarTop">
+                <ul class="nav navbar-nav navbar-center">
+                    <li><!-- Search for books form -->
+                        <form class="form-inline my-2 my-lg-0" action="{% url 'products:search' %}" method="GET">
+                            <input class="form-control input-md  mr-sm-4" type="search" name="bookSearch" placeholder="Search Book" value='{{request.get.q}}'>
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><span
+                                    style="color:black" class="glyphicon glyphicon-search"></span></button>
+                        </form>
+                    </li>
+                </ul>
+                                </div>
+                                    <!-- Link to Home page -->
+                   <a class="navbar-brand collapsed"  href="{% url 'index' %}">  Bard's Big Bad Bookstore<span class="sr-only">(current)</span>
+                </a>
+
+                <button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
+                        data-target="#navbar" aria-controls="navbar" aria-expanded="false">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <div class="navbar-collapse collapse" id="navbar">
+                <ul class="nav navbar-nav">
+
+                    <!-- Link to Dropdown for genre of Books -->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           href="#" aria-haspopup="true" aria-expanded="false">Books<span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'products:bookGenre' 'scifi' %}">Science Fiction</a></li>
+                            <li><a href="{% url 'products:bookGenre' 'gaming' %}">Gaming</a></li>
+                            <li><a href="{% url 'products:bookGenre' 'iot' %}">Internet of Things</a></li>
+                            <li><a href="{% url 'products:bookGenre' 'history' %}">History</a></li>
+                            <li><a href="{% url 'products:bookGenre' 'social' %}">Social</a></li>
+                            <hr>
+                            <form class="form-inline my-2 my-lg-0" action="{% url 'products:authorse' %}" method="GET">
+                            <div class="form-group">
+                                <label for="sel2"></label>
+                                <select class="" hidden id="sel2" name="bookSearch" placeholder="Search Book" value='{{request.get.q}}'>
+                                    <option> </option>
+                                </select>
+                            </div>
+                             <button class="button button5" type="submit"> <li>Author</li></button>
+                            </form>
+                            <hr>
+
+                            <form class="form-inline my-2 my-lg-0" action="{% url 'products:rating' %}" method="GET">
+                            <div class="form-group">
+                                <label for="sel1"></label>
+                                <select class="" id="sel1" name="bookSearch" placeholder="Search Book" value='{{request.get.q}}'>
+                                    <option> </option>
+                                    <option>5.</option>
+                                    <option> 4. </option>
+                                    <option> 3. </option>
+                                    <option> 2. </option>
+                                    <option> 1. </option>
+                                </select>
+                            </div>
+                             <button class="button button5" type="submit"> <li>Rating</li></button>
+
+
+
+                        </form>
+
+                        </ul>
+                    </li>
+
+                    <!-- Link to About page -->
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <!-- Link to Countact Us page -->
+                    <li><a href="{% url 'contactUs' %}">Contact Us</a></li>
+
+
+
+
+
+
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated %}
+
+                    {% else %}
+                    <li>
+                        <!-- Login id target -->
+                        <a href="#" class="nav-link" data-toggle="modal" data-target="#modalSignIn">Sign In</a>
+                    </li>
+                    {% endif %}
+                    <!-- Link to Dropdown for My Account -->
+                    <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated %}
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" role="button"
+                            href="" aria-haspopup="true" aria-expanded="false">Hello {{ user.nickname }} <span class="glyphicon glyphicon-user"></span><span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'accounts:manageAccount' %}">Manage Account</a></li>
+                        <li><a href="{% url 'payments:displayCC' %}">Manage Payment Method</a></li>
+                        <li><a href="{% url 'accounts:displayAddress' %}">Manage Shipping Address</a></li>
+                        <li><hr></li>
+                    <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+                        </ul>
+                    {% endif %}
+                                    <!-- Link to Shopping Cart -->
+                    <li><a class="nav-link" href="{% url 'payments:shoppingCart' %}"><span class="glyphicon glyphicon-shopping-cart">
+                         </span> Cart</a></li>
+                    <li><a class="nav-link" href="{% url 'payments:shoppingCart' %}"> </a></li>
+                </ul>
+
+
+                    {% if user.is_authenticated %}
+
+                    {% else %}
+                    <li>
+                        <a href="{% url 'accounts:signup' %}">Sign Up</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content* -->
+<div class="container">
+    {% block content %}{% endblock %}
+    </div>
+
+     <!-- Sign In Modal -->
+    <div class="modal fade" id="modalSignIn" role="dialog">
+        <div class="modal-dialog">
+            <!-- Sign In Modal Content -->
+            <div class="modal-content">
+                {% include 'accounts/login.html' %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer with contact information -->
+    <footer class="row-footer" >
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-5 col-xs-offset-1 col-sm-2 col-sm-offset-1">
+                    <h5>Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'index' %}">Home</a></li>
+                        <li><a href="{% url 'about' %}">About</a></li>
+                        <li><a href="{% url 'contactUs' %}">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-xs-6 col-sm-5">
+                    <h5>Our Address</h5>
+                    <address>
+                        6761 SW  193rd Street<br>
+                        33011<br>
+                        Miami,Florida<br>
+                        <i class="fa fa-phone"></i> : +305 1234 5678<br>
+                        <i class="fa fa-envelope"></i> : <a href="#">BardsBigBadBS@gmail.com</a>
+                    </address>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="nav navbar-nav" style="padding: 40px 10px;">
+                        <a class="btn btn-social-icon btn-google-plus" href="http://google.com/+">
+                            <i class="fa fa-google-plus"></i></a>
+                        <a class="btn btn-social-icon btn-facebook" href="http://www.facebook.com/profile.php?id=">
+                            <i class="fa fa-facebook"></i></a>
+                        <a class="btn btn-social-icon btn-linkedin" href="http://www.linkedin.com/in/">
+                            <i class="fa fa-linkedin"></i></a>
+                        <a class="btn btn-social-icon btn-twitter" href="http://twitter.com/">
+                            <i class="fa fa-twitter"></i></a>
+                        <a class="btn btn-social-icon btn-youtube" href="http://youtube.com/">
+                            <i class="fa fa-youtube"></i></a>
+                        <a class="btn btn-social-icon" href="mailto:"><i class="fa fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <p style="padding:10px;"></p>
+                    <p align=center>© Copyright 2017 Bard's Big Bad Bookstore</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- jQuery(neccessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    {% block javascript_code %} {% endblock %}
+
+</body>
+</html>
